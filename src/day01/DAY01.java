@@ -1,17 +1,72 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+package day01;
+
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class DAY01 {
-    public static void main(String[] args) {
-        // Press Alt+Eingabe with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    public static void main(String[] args) throws IOException {
+        List<String> lines;
+        boolean useExample = false;
+        boolean verbose = true;
 
-        // Press Umschalt+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
-
-            // Press Umschalt+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Strg+F8.
-            System.out.println("i = " + i);
+        if (!useExample) {
+            lines = Files.readAllLines(Path.of("src/day01/input.txt"));
+        } else {
+            String example = """
+                                1abc2
+                                pqr3stu8vwx
+                                a1b2c3d4e5f
+                                treb7uchet""";
+            lines = Arrays.stream(example.split("\n")).toList();
         }
+
+        System.out.println("first part");
+        char[] numbs = "0123456789".toCharArray();
+        List<Integer> results = new ArrayList<>();
+        for (var line : lines) {
+            System.out.println(line);
+            String first = "";
+            String last = "";
+            for (int i = 0; i < line.length(); i++) {
+                boolean found = false;
+                for (char num : numbs) {
+                    if (line.charAt(i) == num) {
+                        first =  Character.toString(line.charAt(i));
+                        found = true;
+                        System.out.println("found first: " + first);
+                        break;
+                    }
+                }
+                if (found) {
+                    break;
+                }
+            }
+            for (int i = line.length()-1; i >= 0; i--) {
+                boolean found = false;
+                for (char num : numbs) {
+                    if (line.charAt(i) == num) {
+                        last =  Character.toString(line.charAt(i));
+                        System.out.println("found last: " + last);
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    break;
+                }
+
+            }
+            results.add(Integer.valueOf(  first + last));
+        }
+
+        System.out.println(results.stream().reduce(Integer::sum).get());
+
+
+
     }
 }
